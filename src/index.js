@@ -1,3 +1,5 @@
+import "./styles.css";
+
 const WEATHER_API = "SNX2NXYFQLT8982YAZEZ4V8DZ"; // free visual crossing api
 
 async function fetchWeather(region, dataUnit = "metric") {
@@ -40,19 +42,45 @@ class RegionWeather {
 
 const weatherForm = document.querySelector(".form-region-input");
 const regionInput = document.querySelector("#region-input");
+const weatherCardContainer = document.querySelector(".weather-card-container");
+const weatherDescription = document.querySelector(".description");
+const weatherAddress = document.querySelector(".address")
+const weatherTemp = document.querySelector(".temp");
+const weatherTempFeelsLike = document.querySelector(".temp-feelslike");
+const weatherCondition = document.querySelector(".condition");
+const weatherHumidity = document.querySelector(".humidity");
+const weatherCloudCover = document.querySelector(".cloudcover");
+const weatherWindSpeed = document.querySelector(".windspeed");
+
 weatherForm.addEventListener("submit", () => {
   fetchWeather(regionInput.value.trim())
     .then((request) => {
       return request.json();
     })
     .then((request) => {
-      console.log(processData(request));
+      let regionWeather = processData(request);
+      weatherCardContainer.removeAttribute("hidden");
+      weatherAddress.textContent = regionWeather.fullAddress;
+      weatherDescription.textContent = regionWeather.generalDescription;
+      weatherTemp.textContent = regionWeather.currentConditions.temp;
+      weatherTempFeelsLike.textContent = regionWeather.currentConditions.feelslike;
+      weatherCondition.textContent = regionWeather.currentConditions.conditions;
+      weatherHumidity.textContent = regionWeather.currentConditions.humidity;
+      weatherCloudCover.textContent = regionWeather.currentConditions.cloudcover;
+      weatherWindSpeed.textContent = regionWeather.currentConditions.windspeed;
     })
     .catch((request)=>{
       console.error(request);
     });
     regionInput.value = "";
 });
+
+/* function createWeatherCard(data){
+  let description = document.createElement("h1");
+  let address = document.createElement("h2");
+  let currentConditionsContainer = document.createElement("div");
+  let temp = document.createElement()
+} */
 
 /* fetchWeather("london", "metric")
   .then((request) => {
