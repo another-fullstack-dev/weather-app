@@ -38,10 +38,26 @@ class RegionWeather {
   }
 }
 
-fetchWeather("london", "metric")
+const weatherForm = document.querySelector(".form-region-input");
+const regionInput = document.querySelector("#region-input");
+weatherForm.addEventListener("submit", () => {
+  fetchWeather(regionInput.value.trim())
     .then((request) => {
       return request.json();
     })
     .then((request) => {
-      return processData(request);
+      console.log(processData(request));
     })
+    .catch((request)=>{
+      console.error(request);
+    });
+    regionInput.value = "";
+});
+
+/* fetchWeather("london", "metric")
+  .then((request) => {
+    return request.json();
+  })
+  .then((request) => {
+    return processData(request);
+  }); */
