@@ -10,6 +10,7 @@ async function fetchWeather(region, dataUnit = "metric") {
     );
     return request;
   } catch (error) {
+    console.error(error);
     return error;
   }
 }
@@ -44,7 +45,7 @@ const weatherForm = document.querySelector(".form-region-input");
 const regionInput = document.querySelector("#region-input");
 const weatherCardContainer = document.querySelector(".weather-card-container");
 const weatherDescription = document.querySelector(".description");
-const weatherAddress = document.querySelector(".address")
+const weatherAddress = document.querySelector(".address");
 const weatherTemp = document.querySelector(".temp");
 const weatherTempFeelsLike = document.querySelector(".temp-feelslike");
 const weatherCondition = document.querySelector(".condition");
@@ -52,7 +53,8 @@ const weatherHumidity = document.querySelector(".humidity");
 const weatherCloudCover = document.querySelector(".cloudcover");
 const weatherWindSpeed = document.querySelector(".windspeed");
 
-weatherForm.addEventListener("submit", () => {
+weatherForm.addEventListener("submit", (Event) => {
+  Event.preventDefault(); // otherwise refreshes the pages and breaks stuff
   fetchWeather(regionInput.value.trim())
     .then((request) => {
       return request.json();
@@ -62,17 +64,22 @@ weatherForm.addEventListener("submit", () => {
       weatherCardContainer.removeAttribute("hidden");
       weatherAddress.textContent = regionWeather.fullAddress;
       weatherDescription.textContent = regionWeather.generalDescription;
-      weatherTemp.textContent = regionWeather.currentConditions.temp;
-      weatherTempFeelsLike.textContent = regionWeather.currentConditions.feelslike;
+      weatherTemp.textContent =
+        "Temperature: " + regionWeather.currentConditions.temp;
+      weatherTempFeelsLike.textContent =
+        "Feels like " + regionWeather.currentConditions.feelslike;
       weatherCondition.textContent = regionWeather.currentConditions.conditions;
-      weatherHumidity.textContent = regionWeather.currentConditions.humidity;
-      weatherCloudCover.textContent = regionWeather.currentConditions.cloudcover;
-      weatherWindSpeed.textContent = regionWeather.currentConditions.windspeed;
+      weatherHumidity.textContent =
+        "Humidity: " + regionWeather.currentConditions.humidity;
+      weatherCloudCover.textContent =
+        "Cloud cover: " + regionWeather.currentConditions.cloudcover;
+      weatherWindSpeed.textContent =
+        "Wind speed: " + regionWeather.currentConditions.windspeed;
     })
-    .catch((request)=>{
+    .catch((request) => {
       console.error(request);
     });
-    regionInput.value = "";
+  regionInput.value = "";
 });
 
 /* function createWeatherCard(data){
